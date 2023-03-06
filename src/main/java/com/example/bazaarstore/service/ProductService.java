@@ -57,6 +57,13 @@ public class ProductService {
         return productRepository.save(finded);
     }
 
+    public Product findProductById(long id){
+        if (productRepository.findById(id).isPresent()){
+            return productRepository.findProductById(id);
+        }
+        return null;
+    }
+
 
 
 

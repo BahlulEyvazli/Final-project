@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -56,5 +57,8 @@ public class Product {
     @Column(name = "last_updated")
     @UpdateTimestamp
     private Date lastUpdated;
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<Comment> comments;
 
 }

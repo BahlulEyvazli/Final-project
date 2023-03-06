@@ -1,5 +1,6 @@
 package com.example.bazaarstore.dto;
 
+import com.example.bazaarstore.model.entity.User;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -32,4 +33,5 @@ public class ProductDTO {
     private Date dateCreated;
 
     private Date lastUpdated;
+    private User user;
 }
