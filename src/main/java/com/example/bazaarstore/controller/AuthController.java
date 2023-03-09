@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bazaar/auth")
+@RequestMapping("/bazaar/security/auth")
 public class AuthController {
 
     private final AuthService service;
@@ -26,6 +26,7 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+
         return ResponseEntity.ok(service.authenticate(request));
     }
 }

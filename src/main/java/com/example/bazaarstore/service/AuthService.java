@@ -30,7 +30,6 @@ public class AuthService {
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .active(true)
                 .role(Role.ADMIN)
                 .build();
         userRepository.save(user);
@@ -39,14 +38,14 @@ public class AuthService {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest registerRequest){
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        registerRequest.getUsername(),
-                        registerRequest.getPassword()
+                        authenticationRequest.getUsername(),
+                        authenticationRequest.getPassword()
                 )
         );
-        User user = userRepository.findByUsernameAndActiveIsTrue(registerRequest.getUsername());
+        User user = userRepository.findByUsername(authenticationRequest.getUsername()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         return  AuthenticationResponse.builder().token(jwtToken).build();
     }

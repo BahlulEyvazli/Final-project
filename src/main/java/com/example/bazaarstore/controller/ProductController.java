@@ -3,10 +3,8 @@ package com.example.bazaarstore.controller;
 import com.example.bazaarstore.dto.ProductDTO;
 import com.example.bazaarstore.model.entity.Category;
 import com.example.bazaarstore.model.entity.Product;
-import com.example.bazaarstore.model.entity.User;
 import com.example.bazaarstore.repository.CategoryRepository;
 import com.example.bazaarstore.service.ProductService;
-import com.example.bazaarstore.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,40 +14,37 @@ import java.util.List;
 @RequestMapping("/bazaar/product")
 public class ProductController {
 
-    private ProductService productService;
-    private UserService userService;
+    private final ProductService productService;
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductController(ProductService productService, CategoryRepository categoryRepository,UserService userService) {
+
+    public ProductController(ProductService productService, CategoryRepository categoryRepository) {
         this.productService = productService;
         this.categoryRepository = categoryRepository;
-        this.userService=userService;
     }
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<?> createProduct(
-            @PathVariable("userId") long id,
-            @RequestBody ProductDTO productDTO){
-        User user = userService.getUserById(id);
-        productDTO.setUser(user);
+    //must be secure
+    @PostMapping("/create")
+    public ResponseEntity<?> createProduct(@RequestParam("token") String token,@RequestBody ProductDTO productDTO){
         Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow();
-        productService.createProduct(productDTO,category);
+        productService.createProduct(productDTO,category,token);
         return ResponseEntity.ok("Product created");
     }
 
 
     @GetMapping("/findAll")
     public List<Product> findAll(){
+
         return productService.productList();
     }
 
     @GetMapping("/find/{id}")
-    public Product findProduct(@PathVariable Long id){
+    public Product findProduct(@PathVariable("id") Long id){
         return productService.findProduct(id);
     }
 
-
+    //must be secure
     @PostMapping("/{id}/update")
     private ResponseEntity<?> updateProduct(@PathVariable("id") Long id,@RequestBody ProductDTO productDTO){
         Product product = productService.updateProduct(id,productDTO);
