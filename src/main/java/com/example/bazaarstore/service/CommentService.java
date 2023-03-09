@@ -1,30 +1,40 @@
 package com.example.bazaarstore.service;
 
 import com.example.bazaarstore.model.entity.Comment;
-import com.example.bazaarstore.repository.CommentRepo;
-import lombok.RequiredArgsConstructor;
+import com.example.bazaarstore.model.entity.Product;
+import com.example.bazaarstore.model.entity.User;
+import com.example.bazaarstore.repository.CommentRepository;
+import com.example.bazaarstore.repository.ProductRepository;
+import com.example.bazaarstore.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
 public class CommentService {
-    private final CommentRepo commentRepo;
 
-    public List<Comment> getAllComments() {
-        return commentRepo.findAll();
+    private final CommentRepository commentRepository;
+
+    private final JwtService jwtService;
+
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+
+    public CommentService(CommentRepository commentRepository, JwtService jwtService, UserRepository userRepository,
+                          ProductRepository productRepository) {
+        this.commentRepository = commentRepository;
+        this.jwtService = jwtService;
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
 
-    public List<Comment> getAllCommentsByUserID(long id) {
-        return commentRepo.findCommentByUser_Id(id);
+
+
+    public Comment sendComment(String content,String token,Long productId){
+            User user = userRepository.findByUsername(jwtService.extractUserName(token)).orElseThrow();
+            Product product = productRepository.findById(productId).orElseThrow();
+
+            Comment comment = Comment.builder().content(content).product(product).user(user).build();
+
+            return commentRepository.save(comment);
     }
 
-    public void deleteCommentById(long id) {
-        commentRepo.deleteCommentById(id);
-    }
-
-    public void addComment(Comment comment) {
-        commentRepo.save(comment);
-    }
 }

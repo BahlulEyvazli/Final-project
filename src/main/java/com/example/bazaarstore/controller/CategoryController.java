@@ -21,12 +21,14 @@ public class CategoryController {
         return ResponseEntity.ok(category);
     }
 
+    //must be secure
     @PostMapping("/create")
     public ResponseEntity<?> createCategory(@RequestBody Category category){
         categoryService.createCategory(category);
        return ResponseEntity.ok("successfull");
     }
 
+    //must be secure
     @PostMapping("/update")
     public ResponseEntity<?> updateCategory(@RequestBody Category category){
         Category result = categoryService.updateCategory(category);

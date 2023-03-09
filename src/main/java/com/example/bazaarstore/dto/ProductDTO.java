@@ -1,6 +1,5 @@
 package com.example.bazaarstore.dto;
 
-import com.example.bazaarstore.model.entity.User;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -16,13 +15,15 @@ public class ProductDTO {
 
     private Long categoryId;
 
+    private Long userId;
+
     private String sku;
 
     private String name;
 
     private String description;
 
-    private BigDecimal unitPrice;
+    private double unitPrice;
 
     private String imageUrl;
 
@@ -33,5 +34,4 @@ public class ProductDTO {
     private Date dateCreated;
 
     private Date lastUpdated;
-    private User user;
 }
