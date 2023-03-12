@@ -1,37 +1,34 @@
 package com.example.bazaarstore.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.util.Date;
 
 @Entity
-@Table(name = "wishlist")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WishList {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String content;
+
+
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    @Column(name = "created_date")
-    @CreationTimestamp
-    private Date createdDate;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id",referencedColumnName = "id")
+    Product product;
 
-    @ManyToOne()
-    @JoinColumn(name = "product_id")
-    private Product product;
 
 }

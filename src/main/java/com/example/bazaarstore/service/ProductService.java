@@ -3,7 +3,9 @@ package com.example.bazaarstore.service;
 import com.example.bazaarstore.dto.ProductDTO;
 import com.example.bazaarstore.model.entity.Category;
 import com.example.bazaarstore.model.entity.Product;
+import com.example.bazaarstore.model.entity.User;
 import com.example.bazaarstore.repository.ProductRepository;
+import com.example.bazaarstore.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +14,20 @@ import java.util.Optional;
 @Service
 
 public class ProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
+
+    public ProductService(ProductRepository productRepository, JwtService jwtService,
+                          UserRepository userRepository) {
         this.productRepository = productRepository;
+        this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
-    public void createProduct(ProductDTO productDTO, Category category){
+    public void createProduct(ProductDTO productDTO, Category category, String token ){
+        User user = userRepository.findByUsername(jwtService.extractUserName(token)).orElseThrow();
         Product product = Product.builder()
                 .name(productDTO.getName())
                 .dateCreated(productDTO.getDateCreated())
@@ -29,7 +38,8 @@ public class ProductService {
                 .lastUpdated(productDTO.getLastUpdated())
                 .unitPrice(productDTO.getUnitPrice())
                 .unitsInStock(productDTO.getUnitsInStock())
-                .category(category).build();
+                .category(category)
+                .user(user).build();
         productRepository.save(product);
     }
 

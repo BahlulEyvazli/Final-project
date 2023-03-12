@@ -9,11 +9,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +30,15 @@ public class Product {
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     Category category;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    User user;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    Set<Comment> comments;
+
     @Column(name = "sku")
     private String sku;
 
@@ -38,7 +49,7 @@ public class Product {
     private String description;
 
     @Column(name = "unit_price")
-    private BigDecimal unitPrice;
+    private Double unitPrice;
 
     @Column(name = "image_url")
     private String imageUrl;

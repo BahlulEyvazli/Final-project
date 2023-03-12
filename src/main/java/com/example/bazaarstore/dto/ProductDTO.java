@@ -15,13 +15,15 @@ public class ProductDTO {
 
     private Long categoryId;
 
+    private Long userId;
+
     private String sku;
 
     private String name;
 
     private String description;
 
-    private BigDecimal unitPrice;
+    private double unitPrice;
 
     private String imageUrl;
 

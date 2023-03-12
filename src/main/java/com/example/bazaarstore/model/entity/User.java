@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,14 +49,17 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "active")
-    private boolean active;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user",
             fetch = FetchType.LAZY)
     private List<Order> orders;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    Set<Product> products;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    Set<Adress> adresses;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return  List.of(new SimpleGrantedAuthority(getRole().toString()));
