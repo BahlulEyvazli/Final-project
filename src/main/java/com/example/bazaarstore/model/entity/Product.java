@@ -14,7 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "product")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,6 +1,7 @@
 package com.example.bazaarstore.config;
 
 
+import com.example.bazaarstore.repository.TokenRepository;
 import com.example.bazaarstore.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,6 +26,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
 
+    private final TokenRepository tokenRepository;
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -41,8 +44,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         userName = jwtService.extractUserName(jwt);
         if (userName!=null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
-
-            if (jwtService.checkTokenValid(jwt,userDetails)){
+            boolean checkTokenValid = tokenRepository.findByToken(jwt)
+                    .map(t -> !t.isExpired() && !t.isRevoked())
+                    .orElse(false);
+            if (jwtService.checkTokenValid(jwt,userDetails) && checkTokenValid){
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
