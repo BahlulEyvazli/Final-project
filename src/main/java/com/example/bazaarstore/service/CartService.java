@@ -10,6 +10,8 @@ import com.example.bazaarstore.repository.CartRepository;
 import com.example.bazaarstore.repository.ProductRepository;
 import com.example.bazaarstore.repository.UserRepository;
 import lombok.SneakyThrows;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,17 +36,19 @@ public class CartService {
     }
 
 
-    public Cart addToCart(AddToCartDTO addToCartDTO,String token){
+    public Cart addToCart(AddToCartDTO addToCartDTO){
         Product product = productRepository.findById(addToCartDTO.getProductId()).orElseThrow();
-        User user = userRepository.findByUsername(jwtService.extractUserName(token)).orElseThrow();
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
         Cart cart = Cart.builder().product(product)
                 .user(user).quantity(addToCartDTO.getQuantity())
                 .createdDate(new Date()).build();
         return cartRepository.save(cart);
     }
 
-    public CartDTO listCartItems(String token){
-        User user = userRepository.findByUsername(jwtService.extractUserName(token)).orElseThrow();
+    public CartDTO listCartItems(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
 
        List<Cart> cartList =  cartRepository.findAllByUserOrderByCreatedDateDesc(user);
        List<CartItemDTO> cartItemDTOS = new ArrayList<>();
@@ -59,9 +63,9 @@ public class CartService {
     }
 
     @SneakyThrows
-    public void deleteCartItem(Long cartItemId , String token){
-        User user = userRepository.findByUsername(jwtService.extractUserName(token)).orElseThrow();
-
+    public void deleteCartItem(Long cartItemId){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
         Cart cart = cartRepository.findById(cartItemId).orElseThrow();
 
         if (cart.getUser()!=user){
@@ -69,6 +73,10 @@ public class CartService {
         }
 
         cartRepository.delete(cart);
+    }
+
+    public void deleteUserCartItems(User user) {
+        cartRepository.deleteByUser(user);
     }
 
 }

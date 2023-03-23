@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/bazaar/cart")
+@RequestMapping("/cart")
 public class CartController {
 
     private final CartService cartService;
@@ -18,21 +18,20 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addToCart(@RequestParam("token") String token, @RequestBody AddToCartDTO addToCartDTO){
-        Cart cart= cartService.addToCart(addToCartDTO,token);
+    public ResponseEntity<?> addToCart(@RequestBody AddToCartDTO addToCartDTO){
+        Cart cart= cartService.addToCart(addToCartDTO);
         return ResponseEntity.ok(cart);
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCartItems(@RequestParam("token") String token){
-        CartDTO cartDTO = cartService.listCartItems(token);
+    public ResponseEntity<?> getCartItems(){
+        CartDTO cartDTO = cartService.listCartItems();
         return ResponseEntity.ok(cartDTO);
     }
 
     @DeleteMapping("/delete/{cartItemId}")
-    public ResponseEntity<?> deleteCartItem(@PathVariable("cartItemId") Long cartItemId
-            ,@RequestParam("token") String token){
-        cartService.deleteCartItem(cartItemId,token);
+    public ResponseEntity<?> deleteCartItem(@PathVariable("cartItemId") Long cartItemId){
+        cartService.deleteCartItem(cartItemId);
         return ResponseEntity.ok("Cart deleted");
     }
 }

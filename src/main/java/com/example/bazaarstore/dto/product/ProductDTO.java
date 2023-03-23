@@ -1,21 +1,20 @@
-package com.example.bazaarstore.dto;
+package com.example.bazaarstore.dto.product;
 
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ProductDTO {
 
-    private Long id;
+    private Long productId;
 
-    private Long categoryId;
-
-    private Long userId;
+    private String categoryName;
 
     private String sku;
 
@@ -27,11 +26,8 @@ public class ProductDTO {
 
     private String imageUrl;
 
-    private boolean active;
-
     private int unitsInStock;
 
-    private Date dateCreated;
+    private String username;
 
-    private Date lastUpdated;
 }

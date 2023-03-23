@@ -1,18 +1,24 @@
 package com.example.bazaarstore.dto.stripe;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
 
-@Data
+import lombok.*;
+
+
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class CheckItemDTO {
+public class CheckItemDTO{
 
-     String productName;
-     Long  quantity;
-     double price;
-     long productId;
-     int userId;
+     private Long productId;
+
+     private int userId;
+
+     private String productName;
+
+     private Long  quantity;
+
+     private double price;
 }

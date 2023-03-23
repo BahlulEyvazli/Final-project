@@ -2,20 +2,23 @@ package com.example.bazaarstore.controller;
 
 import com.example.bazaarstore.dto.stripe.CheckItemDTO;
 import com.example.bazaarstore.dto.stripe.StripeResponse;
+import com.example.bazaarstore.model.entity.Order;
 import com.example.bazaarstore.service.OrderService;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import com.stripe.model.checkout.Session;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 //Must be secure
 @RestController
-@RequestMapping("/bazaar/order")
+@RequestMapping("/order")
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
@@ -28,6 +31,28 @@ public class OrderController {
     public ResponseEntity<?> checkOutList(@RequestBody List<CheckItemDTO> checkItemDTOS) throws StripeException {
         Session session = orderService.createSession(checkItemDTOS);
         StripeResponse stripeResponse = StripeResponse.builder().sessionId(session.getId()).build();
+        log.info("SESSION :" + stripeResponse);
         return ResponseEntity.ok(stripeResponse);
     }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getAllOrders()   {
+
+        List<Order> orderDtoList = orderService.listOrders();
+
+        return ResponseEntity.ok(orderDtoList);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> placeOrder(@RequestParam("sessionId") String sessionId){
+       orderService.placeOrder(sessionId);
+       return ResponseEntity.ok("Order successfully");
+    }
+
+
+    @PostMapping("/payment")
+    public ResponseEntity<?> makePayment(){
+        return null;
+    }
+
 }

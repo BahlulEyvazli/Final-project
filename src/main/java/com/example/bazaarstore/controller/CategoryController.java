@@ -1,12 +1,13 @@
 package com.example.bazaarstore.controller;
 
+import com.example.bazaarstore.dto.category.CategoryDTO;
 import com.example.bazaarstore.model.entity.Category;
 import com.example.bazaarstore.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/bazaar/category")
+@RequestMapping("/category")
 public class CategoryController {
 
     private CategoryService categoryService;
@@ -17,7 +18,7 @@ public class CategoryController {
 
     @GetMapping("find/{id}")
     public ResponseEntity<?> findCategory(@PathVariable("id") Long id){
-        Category category= categoryService.findById(id);
+        CategoryDTO category= categoryService.findById(id);
         return ResponseEntity.ok(category);
     }
 

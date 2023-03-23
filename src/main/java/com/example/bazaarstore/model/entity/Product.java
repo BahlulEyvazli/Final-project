@@ -6,15 +6,14 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "product")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -67,4 +66,9 @@ public class Product {
     @UpdateTimestamp
     private Date lastUpdated;
 
+
+    @Override
+    public String toString(){
+        return name;
+    }
 }

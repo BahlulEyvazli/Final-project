@@ -57,6 +57,9 @@ public class User implements UserDetails{
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     Set<Product> products;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    Set<Adress> adresses;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return  List.of(new SimpleGrantedAuthority(getRole().toString()));
