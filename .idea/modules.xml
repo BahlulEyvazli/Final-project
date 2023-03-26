@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BazaarStore/BazaarStore.iml" filepath="$PROJECT_DIR$/BazaarStore/BazaarStore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/BazaarStore_backup.iml" filepath="$PROJECT_DIR$/.idea/BazaarStore_backup.iml" />
     </modules>
   </component>
 </project>

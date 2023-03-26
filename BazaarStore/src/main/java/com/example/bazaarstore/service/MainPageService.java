@@ -1,9 +1,10 @@
 package com.example.bazaarstore.service;
+import com.example.bazaarstore.dto.product.ProductShowDTO;
 import com.example.bazaarstore.model.entity.Category;
 import com.example.bazaarstore.model.entity.Product;
 import com.example.bazaarstore.model.entity.User;
-import com.example.bazaarstore.model.entity.WishList;
 import com.example.bazaarstore.repository.CategoryRepository;
+import com.example.bazaarstore.repository.ProductRepository;
 import com.example.bazaarstore.repository.UserRepository;
 import com.example.bazaarstore.repository.WishListRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,44 +17,58 @@ import java.util.*;
 @Service
 @Slf4j
 public class MainPageService {
+    private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
     private final WishListRepository wishListRepository;
 
-    private final JwtService jwtService;
-
     private final CategoryRepository categoryRepository;
 
+    private final ProductService productService;
+
     public MainPageService(WishListRepository wishListRepository,
-                           UserRepository userRepository, JwtService jwtService,
-                           CategoryRepository categoryRepository) {
+                           UserRepository userRepository,
+                           CategoryRepository categoryRepository,
+                           ProductRepository productRepository, ProductService productService) {
         this.wishListRepository = wishListRepository;
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
+        this.productService = productService;
     }
 
 
-    public List<Product> userPage() {
+    public List<ProductShowDTO> userPage() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
         HashMap<Category, Integer> wishesCategory = takeFavoriteCategory(user);
         List<Category> categories = sortedFavorites(wishesCategory);
-        List<Product> productList = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         for (Category category : categories){
             log.info("CATEGORY :" + categoryRepository.findCategoryByCategoryName(category.getCategoryName()).orElseThrow().getProducts());
-            productList.addAll(category.getProducts());
+            products.addAll(category.getProducts());
         }
-        log.info("LIST : " + productList);
-        return productList;
+        log.info("LIST : " + products);
+        if (products==null){
+            return productService.productList();
+        }
+        else {
+            return products.stream().map(product -> ProductShowDTO.builder().productId(product.getId())
+                    .name(product.getName()).sku(product.getSku()).categoryName(product.getCategory().getCategoryName())
+                    .unitPrice(product.getUnitPrice())
+                    .image(product.getImage())
+                    .unitsInStock(product.getUnitsInStock())
+                    .description(product.getDescription()).username(product.getUser().getUsername())
+                    .build()).toList();
+        }
     }
 
     private HashMap<Category,Integer> takeFavoriteCategory(User user) {
         HashMap<Category,Integer> categories = new HashMap<>();
-        List<WishList> wishes = wishListRepository.findAllByUserAndAndProductIsTrue(user);
+        List<Product> wishes = wishListRepository.findActiveProductsByUser(user);
 
-        for (WishList wish : wishes){
-            Category category = wish.getProduct().getCategory();
+        for (Product wish : wishes){
+            Category category = wish.getCategory();
             if (categories.containsKey(category)){
                 categories.put(category,categories.get(category)+1);
             }

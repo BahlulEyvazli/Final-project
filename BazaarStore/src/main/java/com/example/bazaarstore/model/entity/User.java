@@ -39,6 +39,9 @@ public class User implements UserDetails{
     @Column(name = "user_name")
     private String username;
 
+    @Column(name = "image")
+    private byte[] image;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
@@ -49,11 +52,6 @@ public class User implements UserDetails{
     @Column(name = "phone_number")
     private String phoneNumber;
 
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user",
-            fetch = FetchType.LAZY)
-    private List<Order> orders;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     Set<Product> products;

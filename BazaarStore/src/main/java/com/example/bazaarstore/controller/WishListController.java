@@ -1,7 +1,6 @@
 package com.example.bazaarstore.controller;
 
-import com.example.bazaarstore.dto.product.ProductDTO;
-import com.example.bazaarstore.model.entity.WishList;
+import com.example.bazaarstore.dto.product.ProductShowDTO;
 import com.example.bazaarstore.service.WishListService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +18,19 @@ public class WishListController {
 
     @GetMapping("wishlist/{username}")
     public ResponseEntity<?> getAll(@PathVariable("username") String username){
-        List<ProductDTO> list = wishListService.showWishList(username);
+        List<ProductShowDTO> list = wishListService.showWishList(username);
         return ResponseEntity.ok(list);
     }
 
     @PostMapping("/products/{productId}/addwishlist")
     public ResponseEntity<?> addToList(@PathVariable("productId") Long productId){
-        ProductDTO wishList = wishListService.addwishList(productId);
+        ProductShowDTO wishList = wishListService.addwishList(productId);
         return ResponseEntity.ok(wishList);
     }
 
     @GetMapping("/user/wishlist/mywishlist/{productId}")
     public ResponseEntity<?> getProductFromWishList(@PathVariable("productId") Long productId){
-        ProductDTO productDTO = wishListService.getProductFromWishList(productId);
+        ProductShowDTO productDTO = wishListService.getProductFromWishList(productId);
         return ResponseEntity.ok(productDTO);
     }
 

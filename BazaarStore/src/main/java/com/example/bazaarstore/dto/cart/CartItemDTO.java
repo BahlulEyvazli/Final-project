@@ -2,23 +2,20 @@ package com.example.bazaarstore.dto.cart;
 
 import com.example.bazaarstore.model.entity.Cart;
 import com.example.bazaarstore.model.entity.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartItemDTO {
 
-     Long id;
-     Integer quantity;
-     Product product;
+    private int quantity;
 
-     public CartItemDTO(Cart cart) {
-          this.setId(cart.getId());
-          this.setQuantity(cart.getQuantity());
-          this.setProduct(cart.getProduct());
-     }
+    private Product product;
+
+    private double cost;
 }

@@ -1,17 +1,15 @@
 package com.example.bazaarstore.dto.product;
 
+
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductDTO {
+public class ProductShowDTO {
 
     private Long productId;
 
@@ -24,6 +22,8 @@ public class ProductDTO {
     private String description;
 
     private double unitPrice;
+
+    private byte[] image;
 
     private int unitsInStock;
 

@@ -43,14 +43,14 @@ public class Product {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "image")
+    private byte[] image;
+
     @Column(name = "description")
     private String description;
 
     @Column(name = "unit_price")
     private Double unitPrice;
-
-    @Column(name = "image_url")
-    private String imageUrl;
 
     @Column(name = "active")
     private boolean active;

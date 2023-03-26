@@ -32,8 +32,8 @@ public class SecurityConfig {
         httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/bazaar/security/auth/**")
-                .permitAll()
+                .requestMatchers("/bazaar/security/auth/**").permitAll()
+                .requestMatchers("/bazaar/products/findAll").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

@@ -1,7 +1,7 @@
 package com.example.bazaarstore.service;
 
 import com.example.bazaarstore.dto.category.CategoryDTO;
-import com.example.bazaarstore.dto.product.ProductDTO;
+import com.example.bazaarstore.dto.product.ProductShowDTO;
 import com.example.bazaarstore.model.entity.Category;
 import com.example.bazaarstore.model.entity.Product;
 import com.example.bazaarstore.repository.CategoryRepository;
@@ -26,10 +26,12 @@ public class CategoryService {
     public CategoryDTO findById(Long id){
         Category category =  categoryRepository.findById(id).orElseThrow();
         List<Product> products = category.getProducts().stream().toList();
-        List<ProductDTO> productDTOS =
-                products.stream().map(product -> ProductDTO.builder().productId(product.getId())
+        List<ProductShowDTO> productDTOS =
+                products.stream().map(product -> ProductShowDTO.builder().productId(product.getId())
                         .name(product.getName()).sku(product.getSku()).categoryName(product.getCategory().getCategoryName())
-                        .unitPrice(product.getUnitPrice()).imageUrl(product.getImageUrl()).unitsInStock(product.getUnitsInStock())
+                        .unitPrice(product.getUnitPrice())
+                        .image(product.getImage())
+                        .unitsInStock(product.getUnitsInStock())
                         .description(product.getDescription()).username(product.getUser().getUsername())
                         .build()).toList();
 

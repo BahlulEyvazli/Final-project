@@ -1,5 +1,6 @@
 package com.example.bazaarstore.controller;
 
+import com.example.bazaarstore.dto.product.ProductShowDTO;
 import com.example.bazaarstore.model.entity.Product;
 import com.example.bazaarstore.service.MainPageService;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class MainController {
 
     @GetMapping("")
     public ResponseEntity<?> getAll(){
-        List<Product> productList = mainPageService.userPage();
+        List<ProductShowDTO> productList = mainPageService.userPage();
         return ResponseEntity.ok(productList);
     }
 

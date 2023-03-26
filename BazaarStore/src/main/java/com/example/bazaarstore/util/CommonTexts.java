@@ -1,4 +1,4 @@
-package com.example.bazaarstore.statics;
+package com.example.bazaarstore.util;
 
 public class CommonTexts {
 

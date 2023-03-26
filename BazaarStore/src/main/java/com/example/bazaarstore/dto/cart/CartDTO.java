@@ -1,16 +1,19 @@
 package com.example.bazaarstore.dto.cart;
 
+import com.example.bazaarstore.dto.product.ProductShowDTO;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
+
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CartDTO {
 
-     List<CartItemDTO> cartItems;
-     Double totalCost;
+    private List<CartItemDTO> cartItemDTOS;
+
+    private double totalCost;
+
 }

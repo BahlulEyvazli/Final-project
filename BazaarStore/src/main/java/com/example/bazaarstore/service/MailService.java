@@ -1,7 +1,6 @@
 package com.example.bazaarstore.service;
 
 import com.example.bazaarstore.dto.product.ProductDTO;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
