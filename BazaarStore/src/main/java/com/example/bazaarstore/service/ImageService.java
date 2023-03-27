@@ -2,10 +2,8 @@ package com.example.bazaarstore.service;
 
 
 import com.example.bazaarstore.model.entity.Product;
-import com.example.bazaarstore.model.entity.User;
 import com.example.bazaarstore.repository.ProductRepository;
 import com.example.bazaarstore.repository.UserRepository;
-import com.example.bazaarstore.util.ImageUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;

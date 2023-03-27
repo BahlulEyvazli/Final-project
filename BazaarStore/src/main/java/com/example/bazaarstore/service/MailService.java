@@ -1,12 +1,13 @@
 package com.example.bazaarstore.service;
 
+
 import com.example.bazaarstore.dto.product.ProductDTO;
+import com.example.bazaarstore.model.entity.User;
 import com.itextpdf.text.DocumentException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -29,22 +30,10 @@ public class MailService {
     }
 
 
-    public String sendSimpleMail(String toMail,String subject,String text){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(FROM_MAIL);
-        mailMessage.setTo(toMail);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(text);
-
-        mailSender.send(mailMessage);
-
-        return (text + " sent to " + toMail);
-    }
-
     public void sendEmailWithAttachment(String toEmail,
                                         String body,
                                         String subject,
-                                        ProductDTO productDTO) throws MessagingException, DocumentException, IOException {
+                                        ProductDTO productDTO,String fileName) throws MessagingException, DocumentException, IOException {
 
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -58,7 +47,34 @@ public class MailService {
         mimeMessageHelper.setSubject(subject);
 
         FileSystemResource fileSystem
-                = new FileSystemResource(pdfService.createProductCreationPdf(productDTO,"check.pdf"));
+                = new FileSystemResource(pdfService.createProductCreationPdf(productDTO,fileName));
+
+        mimeMessageHelper.addAttachment(fileSystem.getFilename(),
+                fileSystem);
+
+        mailSender.send(mimeMessage);
+        log.info("Mail sent ...");
+
+    }
+
+    public void sendPaymentMail(String toEmail,
+                                String body,
+                                String subject,
+                                User user, String fileName) throws MessagingException, DocumentException, IOException {
+
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        MimeMessageHelper mimeMessageHelper
+                = new MimeMessageHelper(mimeMessage, true);
+
+        mimeMessageHelper.setFrom("spring.email.from@gmail.com");
+        mimeMessageHelper.setTo(toEmail);
+        mimeMessageHelper.setText(body);
+        mimeMessageHelper.setSubject(subject);
+
+        FileSystemResource fileSystem
+                = new FileSystemResource(pdfService.makePayment(user,fileName));
 
         mimeMessageHelper.addAttachment(fileSystem.getFilename(),
                 fileSystem);

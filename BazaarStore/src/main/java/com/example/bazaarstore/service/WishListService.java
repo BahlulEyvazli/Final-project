@@ -57,7 +57,7 @@ public class WishListService {
                 .build()).toList();
     }
 
-    public void deleteWishList(Long productId){
+    public void deleteWishList(Long productId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
         Product product = productRepository.findById(productId).orElseThrow();

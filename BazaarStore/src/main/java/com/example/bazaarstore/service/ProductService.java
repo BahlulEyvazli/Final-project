@@ -52,9 +52,8 @@ public class ProductService {
 
         productRepository.save(product);
         String text = "PRODUCT CREATED : " +"\n" + productDTO;
-        mailService.sendSimpleMail(user.getEmail(), product.getName(),text);
         try {
-            mailService.sendEmailWithAttachment(user.getEmail(),product.getName(),text,productDTO);
+            mailService.sendEmailWithAttachment(user.getEmail(),product.getName(),text,productDTO,"product.pdf");
         } catch (MessagingException | DocumentException | IOException e) {
             throw new RuntimeException(e);
         }

@@ -6,11 +6,14 @@ import com.example.bazaarstore.dto.payment.PaymentDTO;
 import com.example.bazaarstore.dto.product.ProductShowDTO;
 import com.example.bazaarstore.model.entity.*;
 import com.example.bazaarstore.repository.*;
+import com.itextpdf.text.DocumentException;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,13 +25,15 @@ public class CartService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    public CartService(CartRepository cartRepository,UserRepository userRepository,
+    private final MailService mailService;
+    public CartService(CartRepository cartRepository, UserRepository userRepository,
                        ProductRepository productRepository,
-                       CartItemRepository cartItemRepository) {
+                       CartItemRepository cartItemRepository, MailService mailService) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
+        this.mailService = mailService;
     }
 
     public ProductShowDTO addProductToCart(Long productId,int quantity){
@@ -73,8 +78,15 @@ public class CartService {
 
 
     public String makePayment(PaymentDTO paymentDTO){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
         CartDTO cartDTO =showCart();
         resetCart();
+        try {
+            mailService.sendPaymentMail(user.getEmail(),user.getUsername(),"new Order",user,"payment.pdf");
+        } catch (MessagingException | DocumentException | IOException e) {
+            throw new RuntimeException(e);
+        }
         return "succesfull , Total cost :" + cartDTO.getTotalCost();
     }
 
