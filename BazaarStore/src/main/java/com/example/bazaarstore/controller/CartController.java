@@ -1,6 +1,7 @@
 package com.example.bazaarstore.controller;
 
 import com.example.bazaarstore.dto.cart.CartDTO;
+import com.example.bazaarstore.dto.payment.PaymentDTO;
 import com.example.bazaarstore.dto.product.ProductShowDTO;
 import com.example.bazaarstore.service.CartService;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,15 @@ public class CartController {
 
     @GetMapping("/cart")
     public ResponseEntity<?> showCart(){
-        CartDTO cartDTO = cartService.showCart();
+        var cartDTO = cartService.showCart();
         return ResponseEntity.ok(cartDTO);
+    }
+
+
+    @PostMapping("/payment")
+    public ResponseEntity<?> makePayment(@RequestBody PaymentDTO paymentDTO){
+        var result = cartService.makePayment(paymentDTO);
+        return ResponseEntity.ok(result);
     }
 
 }
