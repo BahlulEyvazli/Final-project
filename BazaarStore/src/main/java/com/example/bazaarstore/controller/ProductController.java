@@ -56,8 +56,8 @@ public class ProductController {
     //must be secure
     @PostMapping("/{id}/update")
     private ResponseEntity<?> updateProduct(@PathVariable("id") Long id,@RequestBody ProductDTO productDTO) {
-        Product product = productService.updateProduct(id,productDTO);
-        return ResponseEntity.ok(product);
+        productService.updateProduct(id,productDTO);
+        return ResponseEntity.ok("Product updated");
     }
 
     @PostMapping("/product/{productId}")

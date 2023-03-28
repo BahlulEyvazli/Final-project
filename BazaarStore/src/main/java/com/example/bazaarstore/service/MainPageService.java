@@ -4,7 +4,6 @@ import com.example.bazaarstore.model.entity.Category;
 import com.example.bazaarstore.model.entity.Product;
 import com.example.bazaarstore.model.entity.User;
 import com.example.bazaarstore.repository.CategoryRepository;
-import com.example.bazaarstore.repository.ProductRepository;
 import com.example.bazaarstore.repository.UserRepository;
 import com.example.bazaarstore.repository.WishListRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import java.util.*;
 @Service
 @Slf4j
 public class MainPageService {
-    private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
     private final WishListRepository wishListRepository;
@@ -28,12 +26,10 @@ public class MainPageService {
 
     public MainPageService(WishListRepository wishListRepository,
                            UserRepository userRepository,
-                           CategoryRepository categoryRepository,
-                           ProductRepository productRepository, ProductService productService) {
+                           CategoryRepository categoryRepository,ProductService productService) {
         this.wishListRepository = wishListRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
-        this.productRepository = productRepository;
         this.productService = productService;
     }
 

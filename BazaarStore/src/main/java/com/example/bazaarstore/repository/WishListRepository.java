@@ -11,10 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WishListRepository extends JpaRepository<WishList,Long> {
-
-    List<WishList> findAllByUser(User user);
-
-    List<WishList> findAllByUserAndAndProductIsTrue(User user);
     Optional<WishList> findWishListByProductIdAndUserId(Long productId,Long userId);
 
     @Query("SELECT w.product FROM WishList w WHERE w.user = :user AND w.product.active = true")

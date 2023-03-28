@@ -80,7 +80,7 @@ public class ProductService {
                 .username(product.getUser().getUsername()).build();
     }
 
-    public Product updateProduct(Long id,ProductDTO productDTO) {
+    public void updateProduct(Long id,ProductDTO productDTO) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
         Product finded = productRepository.findById(id).orElseThrow();
@@ -90,10 +90,10 @@ public class ProductService {
             finded.setSku(productDTO.getSku());
             finded.setUnitPrice(productDTO.getUnitPrice());
             finded.setUnitsInStock(productDTO.getUnitsInStock());
-            return productRepository.save(finded);
+            productRepository.save(finded);
         }
         else {
-            return null;
+
         }
     }
 

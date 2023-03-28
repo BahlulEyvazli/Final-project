@@ -1,7 +1,5 @@
 package com.example.bazaarstore.dto.comment;
 
-import com.example.bazaarstore.dto.UserDTO;
-import com.example.bazaarstore.dto.product.ProductDTO;
 import lombok.*;
 
 @Getter
